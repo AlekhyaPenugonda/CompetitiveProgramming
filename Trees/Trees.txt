@@ -1,0 +1,489 @@
+TREES:
+
+PRE ORDER:
+
+No RECURSION and STACK
+
+Node pre;
+    if(root == null)
+        return;
+    Node curr = root;
+    while(curr != null){
+        if(curr.left == null){
+            System.out.print(curr.data+" ");
+            curr = curr.right;
+        }else{
+             pre = curr.left;
+             while(pre.right !=null && pre.right != curr)
+                 pre = pre.right;
+             if(pre.right == null){
+                 pre.right = curr;
+                 System.out.print(curr.data+" ");
+                 curr = curr.left;
+             }else{
+                 pre.right=null;
+                 curr=curr.right;
+             }
+        }
+    }
+
+RECURSION:
+
+def preOrder(root):
+    if root:
+        print(root.info, end =" ")
+        preOrder(root.left)
+        preOrder(root.right)
+
+Binary search tree Check:
+
+tree_vals = []
+
+class Node:
+    def __init__(self, k, val):
+        self.key = k
+        self.value = val
+        self.left = None
+        self.right = None
+        
+def inorder(tree):
+    if tree != None:
+        inorder(tree.left)
+        tree_vals.append(tree.value)
+        inorder(tree.right)
+        
+def sort_check(tree_vals):
+    return tree_vals == sorted(tree_vals)
+
+
+root= Node(10, "Hello")
+root.left = Node(5, "Five")
+root.right= Node(30, "Thirty")
+
+inorder(root) # prints True, since this tree is valid
+print(sort_check(tree_vals))
+
+root = Node(10, "Ten")
+root.right = Node(20, "Twenty")
+root.left = Node(5, "Five")
+root.left.right = Node(15, "Fifteen")
+
+inorder(root) # prints True, since this tree is valid
+print(sort_check(tree_vals))
+
+%timeit inorder(root)
+3.79 µs ± 539 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+
+
+Most used:
+
+class Node:
+    def __init__(self, k, val):
+        self.key = k
+        self.value = val
+        self.left = None
+        self.right = None
+
+def tree_max(node):
+    if not node:
+        return float("-inf")
+    maxleft  = tree_max(node.left)
+    maxright = tree_max(node.right)
+    return max(node.key, maxleft, maxright)
+
+def tree_min(node):
+    if not node:
+        return float("inf")
+    minleft  = tree_min(node.left)
+    minright = tree_min(node.right)
+    return min(node.key, minleft, minright)
+
+def verify(node):
+    if not node:
+        return True
+    if (tree_max(node.left) <= node.key <= tree_min(node.right) and
+        verify(node.left) and verify(node.right)):
+        return True
+    else:
+        return False
+
+root= Node(10, "Hello")
+root.left = Node(5, "Five")
+root.right= Node(30, "Thirty")
+
+print(verify(root)) # prints True, since this tree is valid
+
+root = Node(10, "Ten")
+root.right = Node(20, "Twenty")
+root.left = Node(5, "Five")
+root.left.right = Node(15, "Fifteen")
+
+print(verify(root)) # prints False, since 15 is to the left of 10
+
+%timeit inorder(root)
+3.92 µs ± 502 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+
+
+Nodes and References Implementation of a Tree
+In this notebook is the code corresponding to the lecture for implementing the representation of a Tree as a class with nodes and references!
+
+class BinaryTree(object):
+    def __init__(self,rootObj):
+        self.key = rootObj
+        self.leftChild = None
+        self.rightChild = None
+​
+    def insertLeft(self,newNode):
+        if self.leftChild == None:
+            self.leftChild = BinaryTree(newNode)
+        else:
+            t = BinaryTree(newNode)
+            t.leftChild = self.leftChild
+            self.leftChild = t
+​
+    def insertRight(self,newNode):
+        if self.rightChild == None:
+            self.rightChild = BinaryTree(newNode)
+        else:
+            t = BinaryTree(newNode)
+            t.rightChild = self.rightChild
+            self.rightChild = t
+​
+​
+    def getRightChild(self):
+        return self.rightChild
+​
+    def getLeftChild(self):
+        return self.leftChild
+​
+    def setRootVal(self,obj):
+        self.key = obj
+​
+    def getRootVal(self):
+        return self.key
+We can see some examples of creating a tree and assigning children. Note that some outputs are Trees themselves!
+
+from __future__ import print_function
+​
+r = BinaryTree('a')
+print(r.getRootVal())
+print(r.getLeftChild())
+r.insertLeft('b')
+print(r.getLeftChild())
+print(r.getLeftChild().getRootVal())
+r.insertRight('c')
+print(r.getRightChild())
+print(r.getRightChild().getRootVal())
+r.getRightChild().setRootVal('hello')
+print(r.getRightChild().getRootVal())
+a
+None
+<__main__.BinaryTree object at 0x104779c10>
+b
+<__main__.BinaryTree object at 0x103b42c50>
+c
+hello
+
+
+Me:
+
+class binary_tree:
+    
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+    
+    def insert_left(self, data):
+        if self.left == None:
+            self.left = binary_tree(data)
+        else:
+            t = binary_tree(data)
+            t.left = self.left
+            self.left = t
+
+    def insert_right(self, data):
+        if self.right == None:
+            self.right = binary_tree(data)
+        else:   
+            t = binary_tree(data)
+            t.right = self.right
+            self.right = t
+
+def in_order(root):
+    if root:
+        in_order(root.left)
+        print(root.data, end = " ")
+        in_order(root.right)
+
+n = binary_tree(5)
+n.insert_left(3)
+n.insert_right(7)
+n.left.insert_left(2)
+n.left.insert_right(4)
+n.right.insert_left(6)
+n.right.insert_right(8)
+in_order(n)
+
+
+Insertion in binary Search tree:
+
+ def insertion(self, cur, val):
+        if not cur: 
+            cur = Node(val)
+        elif cur.info > val: 
+            cur.left = self.insertion(cur.left, val)
+        else: 
+            cur.right = self.insertion(cur.right, val)
+
+        return cur
+        
+
+    def insert(self, val):
+        if not self.root:
+            self.root = Node(val)
+        else:
+            self.insertion(self.root, val)
+Iterative:
+
+    def insert(self, val):
+        cur = self.root
+        if not cur: 
+            self.root = Node(val)
+            return self.root
+        
+        while cur:
+            if cur.info > val: 
+                if cur.left:
+                    cur = cur.left
+                else:
+                    cur.left = Node(val)
+                    break
+            else: 
+                if cur.right:
+                    cur = cur.right
+                else:
+                    cur.right = Node(val)
+                    break
+        
+        return self.root
+
+Lowest Common Ancestor:
+
+static Node lca(Node root,int v1,int v2)
+{
+    Node temp = root; // not necessary, just use root, just a leftover from a different attempt.
+    
+    while (true) {
+        if (temp.data > v1 && temp.data > v2) {
+            temp = temp.left;
+        } else if (temp.data < v1 && temp.data < v2) {
+            temp = temp.right;
+        } else {
+            return temp;
+        }
+    }
+}
+
+Iterative:
+
+def lca(root, v1, v2):
+    if not root:
+        return 
+    l1 = []
+    l2 = []
+    curr = root
+    while(curr):
+        l1.append(curr)
+        if curr.info == v1:
+            #print(curr.info)
+            break
+        elif curr.info > v1:
+            curr = curr.left
+        else:
+            curr = curr.right
+    curr = root
+    while(curr):
+        l2.append(curr)
+        if curr.info == v2:
+            #print(curr.info)
+            break
+        elif curr.info > v2:
+            curr = curr.left
+        else:
+            curr = curr.right
+    if len(l1)<len(l2):
+        for i in range(len(l1)-1, -1, -1):
+            if l1[i] in l2:
+                return l1[i]
+    else:
+        for j in range(len(l2)-1, -1, -1):
+            if l2[j] in l1:
+                return l2[j]
+
+Level order traversal:
+
+def levelOrder(root):
+    d = []
+    if not root:
+        return root
+    d.append(root)
+    while len(d) != 0:
+        rt = d[0]
+        del d[0]
+        print(rt.info, end = " ")
+        if rt.left != None:
+            d.append(rt.left)
+        if rt.right != None:
+            d.append(rt.right)
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return None
+        l = []
+        s = []
+        node = root
+        while( len(s) != 0 or node != None):
+            if node != None:
+                s.append(node)
+                node = node.left
+            else:
+                node = s.pop()
+                l.append(node.val)
+                node = node.right
+        return l
+
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return None
+        s = []
+        l = []
+        node = root
+        while len(s) != 0 or node != None:
+            if node != None:
+                s.append(node)
+                l.append(node.val)
+                node = node.left
+            else:
+                node = s.pop()
+                node = node.right
+        return l
+
+Create binary tree:
+
+def create(self, val):  
+        if self.root == None:
+            self.root = Node(val)
+        else:
+            current = self.root
+         
+            while True:
+                if val < current.info:
+                    if current.left:
+                        current = current.left
+                    else:
+                        current.left = Node(val)
+                        break
+                elif val > current.info:
+                    if current.right:
+                        current = current.right
+                    else:
+                        current.right = Node(val)
+                        break
+                else:
+                    break
+
+Top view:
+
+def topView(root):
+    m = {}
+    q = []
+    level = 0
+    root.level = level
+    q.append(root)
+    while(len(q)):
+        r = q[0]
+        level = r.level
+        if level not in m:
+            m[level] = r.info
+        if r.left:
+            q.append(r.left)
+            r.left.level = r.level - 1
+        if r.right:
+            q.append(r.right)
+            r.right.level = r.level + 1
+        q.pop(0)
+    for v in sorted(m):
+        print(m[v], end = " ")
+
+Huffman coding:
+
+Sample Input:
+
+s="1001011"
+
+Sample Output:
+
+ABACA
+Explanation
+
+S="1001011"
+Processing the string from left to right.
+S[0]='1' : we move to the right child of the root. We encounter a leaf node with value 'A'. We add 'A' to the decoded string.
+We move back to the root.
+
+S[1]='0' : we move to the left child. 
+S[2]='0' : we move to the left child. We encounter a leaf node with value 'B'. We add 'B' to the decoded string.
+We move back to the root.
+
+S[3] = '1' : we move to the right child of the root. We encounter a leaf node with value 'A'. We add 'A' to the decoded string.
+We move back to the root.
+
+S[4]='0' : we move to the left child. 
+S[5]='1' : we move to the right child. We encounter a leaf node with value C'. We add 'C' to the decoded string.
+We move back to the root.
+
+ S[6] = '1' : we move to the right child of the root. We encounter a leaf node with value 'A'. We add 'A' to the decoded string.
+We move back to the root.
+
+Decoded String = "ABACA"
+
+def decodeHuff(root , s):
+   #Enter Your Code Here
+    temp=root
+    string=[]
+    for i in s:
+        c=int(i)
+        if c==1:
+            temp=temp.right
+        elif c==0:
+            temp=temp.left
+        if temp.right==None and temp.left==None:
+            string.append(temp.data)
+            temp=root
+    b=''.join(string)
+    print b
+
+Me:
+
+def decodeHuff(root, s):
+    q = [root]
+    l = []
+    i = 0
+    while( i < len(s)):
+        r = q[0]
+        while not (r.left == None and r.right == None):
+            if s[i] == '1':
+                if r.right:
+                    r = r.right
+                    i = i + 1
+            elif s[i] == '0':
+                if r.left:
+                    r = r.left
+                    i = i + 1
+        l.append(r.data)
+    for i in l:
+        print(i, end= "")
